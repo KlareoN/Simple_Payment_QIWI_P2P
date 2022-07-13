@@ -12,4 +12,4 @@
 # Миск
 Данный бот сделан для работы с QIWI P2P, в нём присуствует создание платежа, проверка на оплату, выдача текста если платёж найден.
 
-![SCREENSHOT](https://imgur.com/6EYulxN)
+![SCREENSHOT](https://i.imgur.com/6EYulxN.png)
