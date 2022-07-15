@@ -21,7 +21,7 @@ class handler_start:
             comment = uuid4().__str__()
 
             bill = qiwi_p2p.create_bill(
-                bill_id = uuid4().hex,
+                bill_id = uuid4().hex.__str__(),
                 amount = settings().amount,
                 comment = comment,
                 expiration_datetime = timedelta(minutes = 60)
@@ -30,7 +30,7 @@ class handler_start:
             database_payment().create_payment(
                 user_id = message.from_user.id,
                 chat_id = message.chat.id,
-                build_id = bill['bill_id'],
+                build_id = bill['bill_id'].__str__(),
                 amount = settings().amount,
                 comment = comment,
                 create_pay = strftime("%Y-%m-%d %H:%M:%S"),
@@ -39,9 +39,9 @@ class handler_start:
             )
 
         message_text = (
-            f'<b>Привет</>, я выставил тебе счёт через P2P!\n\n'
-            f'<b>Сумма платежа:</> <code>{settings().amount:0.2f}₽</>\n'
-            f'<i>Время действия платежа ограничено!</>'
+            f'<b>Привет</b>, я выставил тебе счёт через P2P!\n\n'
+            f'<b>Сумма платежа:</b> <code>{settings().amount:0.2f}₽</code>\n'
+            f'<i>Время действия платежа ограничено!</i>'
         )
 
         return await message.answer(
@@ -58,7 +58,7 @@ class handler_start:
         query = database_payment().get_payment_information(
             user_id = call.from_user.id
         )
-        if qiwi_p2p.get_bill(query[0])['status']['value'] == 'PAID':
+        if qiwi_p2p.get_bill(query[1])['status']['value'] == 'PAID':
             database_payment().delete_payment(
                 user_id = call.from_user.id
             )
