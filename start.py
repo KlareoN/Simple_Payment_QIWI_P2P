@@ -9,17 +9,23 @@ from aioschedule import run_pending, every
 from core.database import database_payment
 from time import strftime
 
+from asyncio import sleep
+
 
 async def payment_verification():
-    for i in database_payment().get_all_users():
-        if i[1] <= strftime("%Y-%m-%d %H:%M:%S"):
-            await bot.send_message(
-                chat_id = i[0],
-                text = 'Платёж истёк!'
-            )
-            database_payment().delete_payment(
-                user_id = i[0]
-            )
+    try:
+        for i in database_payment().get_all_users():
+            if i[1] <= strftime("%Y-%m-%d %H:%M:%S"):
+                await bot.send_message(
+                    chat_id = i[0],
+                    text = 'Платёж истёк!'
+                )
+                database_payment().delete_payment(
+                    user_id = i[0]
+                )
+                await sleep(1)
+    except:
+        pass
 
 
 async def scheduler():
