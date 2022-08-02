@@ -55,21 +55,24 @@ class handler_start:
     async def check_payment(
         call: types.CallbackQuery
     ):
-        query = database_payment().get_payment_information(
-            user_id = call.from_user.id
-        )
-        if qiwi_p2p.get_bill(query[1])['status']['value'] == 'PAID':
-            database_payment().delete_payment(
+        try:
+            query = database_payment().get_payment_information(
                 user_id = call.from_user.id
             )
+            if qiwi_p2p.get_bill(query[1])['status']['value'] == 'PAID':
+                database_payment().delete_payment(
+                    user_id = call.from_user.id
+                )
 
-            return await call.answer(
-                'Платёж найден!'
-            )
-        else:
-            return await call.answer(
-                'Платёж не найден!'
-            )
+                return await call.answer(
+                    'Платёж найден!'
+                )
+            else:
+                return await call.answer(
+                    'Платёж не найден!'
+                )
+        except:
+            pass
 
 
     @staticmethod
